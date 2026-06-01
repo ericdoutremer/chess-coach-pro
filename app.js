@@ -1,7 +1,6 @@
 let board = [];
 let selected = null;
 
-/* ♟️ PIÈCES UNICODE (100% fiables partout) */
 const pieces = {
 "r":"♜","n":"♞","b":"♝","q":"♛","k":"♚","p":"♟",
 "R":"♖","N":"♘","B":"♗","Q":"♕","K":"♔","P":"♙"
@@ -9,7 +8,7 @@ const pieces = {
 
 function start(){
 document.getElementById("menu").style.display="none";
-document.getElementById("game").style.display="block";
+document.getElementById("game").style.display="flex";
 init();
 }
 
@@ -40,7 +39,7 @@ let color = (r+c)%2===0 ? "white" : "black";
 let p = board[r][c];
 
 html += `
-<div class="square ${color}" onclick="click(${r},${c})">
+<div class="square ${color}" onclick="clickSquare(${r},${c})">
 ${pieces[p] || ""}
 </div>`;
 }
@@ -49,7 +48,7 @@ ${pieces[p] || ""}
 document.getElementById("board").innerHTML = html;
 }
 
-function click(r,c){
+function clickSquare(r,c){
 
 if(selected){
 let [sr,sc]=selected;
@@ -60,27 +59,24 @@ board[sr][sc]="";
 selected=null;
 render();
 
-setTimeout(aiMove,300);
+setTimeout(aiMove,200);
 
 }else{
 selected=[r,c];
 }
 }
 
-/* 🤖 IA ULTRA SIMPLE MAIS QUI MARCHE */
+/* 🤖 IA GARANTIE ACTIVE */
 function aiMove(){
 
 let moves=[];
 
-// cherche pièces noires
+// pièces noires
 for(let r=0;r<8;r++){
 for(let c=0;c<8;c++){
 
 let p = board[r][c];
-if(!p) continue;
-
-// noirs seulement
-if(p !== p.toLowerCase()) continue;
+if(!p || p !== p.toLowerCase()) continue;
 
 let dirs=[[1,0],[-1,0],[0,1],[0,-1]];
 
