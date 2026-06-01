@@ -1,15 +1,26 @@
-alert("APP JS CHARGÉ");
 let board = [];
 let selected = null;
 
+/* 🔥 PIÈCES EN IMAGES (ULTRA CLAIR, CROSS-BROWSER) */
 const pieces = {
-"r":"♜","n":"♞","b":"♝","q":"♛","k":"♚","p":"♟",
-"R":"♖","N":"♘","B":"♗","Q":"♕","K":"♔","P":"♙"
+"r":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/br.png",
+"n":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bn.png",
+"b":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bb.png",
+"q":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bq.png",
+"k":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bk.png",
+"p":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bp.png",
+
+"R":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wr.png",
+"N":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wn.png",
+"B":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wb.png",
+"Q":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wq.png",
+"K":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wk.png",
+"P":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wp.png"
 };
 
 function start(){
 document.getElementById("menu").style.display="none";
-document.getElementById("game").style.display="flex";
+document.getElementById("game").style.display="block";
 init();
 }
 
@@ -41,7 +52,7 @@ let p = board[r][c];
 
 html += `
 <div class="square ${color}" onclick="clickSquare(${r},${c})">
-${pieces[p] ? pieces[p] : ""}
+${p ? `<img src="${pieces[p]}" />` : ""}
 </div>`;
 }
 }
