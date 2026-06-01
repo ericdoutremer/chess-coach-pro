@@ -22,12 +22,6 @@ padding:16px;
 margin:12px 0;
 border-radius:16px;
 cursor:pointer;
-transition:0.2s;
-}
-
-.card:hover{
-transform:scale(1.02);
-background:#243041;
 }
 
 #gameArea{
@@ -42,16 +36,12 @@ margin:10px;
 border-radius:12px;
 }
 
-select,button{
+button{
 width:100%;
 padding:12px;
 margin-top:8px;
 border:none;
 border-radius:10px;
-font-size:16px;
-}
-
-button{
 background:#3b82f6;
 color:white;
 font-weight:bold;
@@ -61,13 +51,15 @@ font-weight:bold;
 width:90%;
 max-width:360px;
 margin:10px auto;
-display:block;
-aspect-ratio: 1 / 1;
+aspect-ratio: 1/1;
+min-height:320px;
+background:#222;
 }
 
-/* FIX IMPORTANT chessboard.js */
+/* IMPORTANT chessboard fix */
 .board-b72b1{
 width:100% !important;
+height:100% !important;
 }
 
 .board-b72b1 img{
@@ -78,5 +70,4 @@ height:12.5% !important;
 #info{
 padding:10px;
 white-space:pre-line;
-font-size:14px;
 }

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Chess Coach Pro</title>
 
 <link rel="stylesheet" href="style.css">
@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body onload="initMenu()">
 
 <header class="topbar">♟️ Chess Coach Pro</header>
 
@@ -25,12 +25,12 @@
 
 <div class="card" onclick="startGame('play')">
 <h2>▶ Jouer vs IA</h2>
-<p>Affronte le moteur</p>
+<p>Affronte Stockfish</p>
 </div>
 
 <div class="card" onclick="startGame('train')">
 <h2>🧠 Entraînement</h2>
-<p>Répertoire d’ouvertures</p>
+<p>Répertoire</p>
 </div>
 
 </div>
@@ -38,29 +38,16 @@
 <div id="gameArea">
 
 <div class="panel">
-
 <select id="opening">
 <option value="anglaise">Anglaise</option>
 <option value="scandinave">Scandinave</option>
 <option value="hollandaise">Hollandaise</option>
 </select>
 
-<select id="elo">
-<option>800</option>
-<option>1200</option>
-<option selected>1500</option>
-<option>1800</option>
-</select>
-
 <button onclick="newGame()">♻ Nouvelle partie</button>
-
 </div>
 
 <div id="board"></div>
-
-<div class="panel">
-<div id="eloDisplay">Elo joueur: 1000</div>
-</div>
 
 <div id="info"></div>
 

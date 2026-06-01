@@ -1,25 +1,26 @@
 let game;
 let board;
 let engine;
+let mode="play";
 
-let playerElo = 1000;
-let trainStep = 0;
+function initMenu(){
+document.getElementById("menu").style.display="block";
+document.getElementById("gameArea").style.display="none";
+}
 
-function startGame(mode){
+function startGame(m){
+
+mode = m;
 
 document.getElementById("menu").style.display="none";
 document.getElementById("gameArea").style.display="block";
 
-window.mode = mode;
-
-initGame();
+setTimeout(initBoard,200);
 }
 
-function initGame(){
+function initBoard(){
 
 game = new Chess();
-
-setTimeout(()=>{
 
 board = Chessboard('board', {
 position:'start',
@@ -29,12 +30,7 @@ onDrop:onDrop,
 onSnapEnd:()=>board.position(game.fen())
 });
 
-},100);
-
 engine = Stockfish();
-
-playerElo = 1000;
-trainStep = 0;
 
 document.getElementById("info").innerText="";
 }
@@ -49,21 +45,13 @@ promotion:'q'
 
 if(!move) return 'snapback';
 
-if(window.mode === "train"){
-return training(move);
-}
-
-analyze(move,false);
-updateElo(false);
-
 setTimeout(aiMove,400);
-checkGameOver();
 }
 
 function aiMove(){
 
 engine.postMessage("position fen " + game.fen());
-engine.postMessage("go depth 12");
+engine.postMessage("go depth 10");
 
 engine.onmessage = function(e){
 
@@ -73,72 +61,10 @@ let best = e.data.split(" ")[1];
 
 game.move(best);
 board.position(game.fen());
-
-analyze({to:best},true);
-updateElo(true);
-
-checkGameOver();
 }
 };
 }
 
-function analyze(move,isAI){
-
-let text="";
-
-if(move.captured){
-text="⚠️ échange";
-}
-else if(["e4","d4","e5","d5"].includes(move.to)){
-text="✔ centre";
-}
-else{
-text="♟ coup";
-}
-
-document.getElementById("info").innerText +=
-(isAI?"🤖 ":"🧑 ")+text+"\n";
-}
-
-function updateElo(good){
-
-if(good) playerElo += 5;
-else playerElo -= 10;
-
-if(playerElo < 400) playerElo = 400;
-
-document.getElementById("eloDisplay").innerText =
-"Elo joueur: " + playerElo;
-}
-
-function training(move){
-
-let open = document.getElementById("opening").value;
-let line = OPENINGS[open];
-
-let expected = line[trainStep];
-
-if(game.fen().includes(expected.split(" ").pop())){
-trainStep++;
-document.getElementById("info").innerText =
-"✔ bon coup";
-}else{
-document.getElementById("info").innerText =
-"❌ erreur ouverture";
-}
-}
-
-function checkGameOver(){
-
-if(game.in_checkmate()){
-document.getElementById("info").innerText += "\n🏆 mat";
-}
-
-if(game.in_draw()){
-document.getElementById("info").innerText += "\n🤝 nulle";
-}
-}
-
 function newGame(){
-initGame();
+initBoard();
 }
