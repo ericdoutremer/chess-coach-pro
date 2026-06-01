@@ -3,71 +3,63 @@ margin:0;
 font-family:Arial;
 background:#0b1020;
 color:white;
+text-align:center;
 }
 
 .topbar{
 padding:14px;
 background:#111827;
-text-align:center;
 font-weight:bold;
 }
 
 #menu{
-padding:15px;
+padding:20px;
 }
 
 .card{
 background:#1f2937;
-padding:16px;
-margin:12px 0;
-border-radius:16px;
+padding:20px;
+border-radius:14px;
 cursor:pointer;
 }
 
-#gameArea{
+#game{
 display:none;
 padding:10px;
-}
-
-.panel{
-background:#1f2937;
-padding:10px;
-margin:10px;
-border-radius:12px;
-}
-
-button{
-width:100%;
-padding:12px;
-margin-top:8px;
-border:none;
-border-radius:10px;
-background:#3b82f6;
-color:white;
-font-weight:bold;
 }
 
 #board{
 width:90%;
 max-width:360px;
-margin:10px auto;
-aspect-ratio: 1/1;
-min-height:320px;
-background:#222;
+margin:20px auto;
+display:grid;
+grid-template-columns:repeat(8,1fr);
+aspect-ratio:1/1;
+border:3px solid #333;
+border-radius:8px;
+overflow:hidden;
 }
 
-/* IMPORTANT chessboard fix */
-.board-b72b1{
-width:100% !important;
-height:100% !important;
+.square{
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+user-select:none;
 }
 
-.board-b72b1 img{
-width:12.5% !important;
-height:12.5% !important;
+.white{background:#f0d9b5;}
+.black{background:#b58863;}
+
+.panel{
+margin:10px;
 }
 
-#info{
-padding:10px;
-white-space:pre-line;
+button{
+padding:12px;
+width:90%;
+background:#3b82f6;
+border:none;
+color:white;
+border-radius:10px;
 }

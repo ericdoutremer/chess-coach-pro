@@ -1,70 +1,68 @@
-let game;
-let board;
-let engine;
-let mode="play";
+let board = [];
+let selected = null;
 
-function initMenu(){
-document.getElementById("menu").style.display="block";
-document.getElementById("gameArea").style.display="none";
-}
-
-function startGame(m){
-
-mode = m;
-
-document.getElementById("menu").style.display="none";
-document.getElementById("gameArea").style.display="block";
-
-setTimeout(initBoard,200);
-}
-
-function initBoard(){
-
-game = new Chess();
-
-board = Chessboard('board', {
-position:'start',
-draggable:true,
-pieceTheme:"https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png",
-onDrop:onDrop,
-onSnapEnd:()=>board.position(game.fen())
-});
-
-engine = Stockfish();
-
-document.getElementById("info").innerText="";
-}
-
-function onDrop(source,target){
-
-let move = game.move({
-from:source,
-to:target,
-promotion:'q'
-});
-
-if(!move) return 'snapback';
-
-setTimeout(aiMove,400);
-}
-
-function aiMove(){
-
-engine.postMessage("position fen " + game.fen());
-engine.postMessage("go depth 10");
-
-engine.onmessage = function(e){
-
-if(e.data.includes("bestmove")){
-
-let best = e.data.split(" ")[1];
-
-game.move(best);
-board.position(game.fen());
-}
+const pieces = {
+"r":"♜","n":"♞","b":"♝","q":"♛","k":"♚","p":"♟",
+"R":"♖","N":"♘","B":"♗","Q":"♕","K":"♔","P":"♙"
 };
+
+function start(){
+document.getElementById("menu").style.display="none";
+document.getElementById("game").style.display="block";
+init();
 }
 
-function newGame(){
-initBoard();
+function init(){
+
+board = [
+["r","n","b","q","k","b","n","r"],
+["p","p","p","p","p","p","p","p"],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["P","P","P","P","P","P","P","P"],
+["R","N","B","Q","K","B","N","R"]
+];
+
+render();
+}
+
+function render(){
+
+let html="";
+
+for(let r=0;r<8;r++){
+for(let c=0;c<8;c++){
+
+let color = (r+c)%2===0 ? "white" : "black";
+let p = board[r][c];
+
+html += `
+<div class="square ${color}" onclick="clickSquare(${r},${c})">
+${pieces[p] || ""}
+</div>`;
+}
+}
+
+document.getElementById("board").innerHTML = html;
+}
+
+function clickSquare(r,c){
+
+if(selected){
+let [sr,sc]=selected;
+
+board[r][c]=board[sr][sc];
+board[sr][sc]="";
+
+selected=null;
+render();
+}else{
+selected=[r,c];
+}
+}
+
+function reset(){
+init();
 }
