@@ -1,3 +1,4 @@
+alert("APP JS CHARGÉ");
 let board = [];
 let selected = null;
 
