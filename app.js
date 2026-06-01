@@ -1,21 +1,9 @@
 let board = [];
 let selected = null;
 
-/* 🔥 PIÈCES EN IMAGES (ULTRA CLAIR, CROSS-BROWSER) */
 const pieces = {
-"r":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/br.png",
-"n":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bn.png",
-"b":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bb.png",
-"q":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bq.png",
-"k":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bk.png",
-"p":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/bp.png",
-
-"R":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wr.png",
-"N":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wn.png",
-"B":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wb.png",
-"Q":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wq.png",
-"K":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wk.png",
-"P":"https://images.chesscomfiles.com/chess-themes/pieces/neo/150/wp.png"
+"r":"♜","n":"♞","b":"♝","q":"♛","k":"♚","p":"♟",
+"R":"♖","N":"♘","B":"♗","Q":"♕","K":"♔","P":"♙"
 };
 
 function start(){
@@ -51,8 +39,8 @@ let color = (r+c)%2===0 ? "white" : "black";
 let p = board[r][c];
 
 html += `
-<div class="square ${color}" onclick="clickSquare(${r},${c})">
-${p ? `<img src="${pieces[p]}" />` : ""}
+<div class="square ${color}" onclick="move(${r},${c})">
+${pieces[p] || ""}
 </div>`;
 }
 }
@@ -60,7 +48,7 @@ ${p ? `<img src="${pieces[p]}" />` : ""}
 document.getElementById("board").innerHTML = html;
 }
 
-function clickSquare(r,c){
+function move(r,c){
 
 if(selected){
 let [sr,sc]=selected;
@@ -69,10 +57,52 @@ board[r][c]=board[sr][sc];
 board[sr][sc]="";
 
 selected=null;
+
 render();
+
+// 🤖 IA joue après toi
+setTimeout(aiMove,300);
+
 }else{
 selected=[r,c];
 }
+}
+
+function aiMove(){
+
+let moves=[];
+
+// IA très simple : cherche pièces noires
+for(let r=0;r<8;r++){
+for(let c=0;c<8;c++){
+
+let p = board[r][c];
+if(!p) continue;
+
+// IA joue les noirs
+if(p !== p.toLowerCase()) continue;
+
+let dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+for(let d of dirs){
+let nr=r+d[0], nc=c+d[1];
+
+if(nr>=0 && nr<8 && nc>=0 && nc<8){
+
+moves.push({fr:r,fc:c,tr:nr,tc:nc});
+}
+}
+}
+}
+
+if(moves.length===0) return;
+
+let m = moves[Math.floor(Math.random()*moves.length)];
+
+board[m.tr][m.tc]=board[m.fr][m.fc];
+board[m.fr][m.fc]="";
+
+render();
 }
 
 function reset(){

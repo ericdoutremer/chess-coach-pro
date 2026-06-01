@@ -1,22 +1,14 @@
-*{
-box-sizing:border-box;
-}
-
 body{
 margin:0;
 font-family:Arial;
 background:#0b1020;
 color:white;
-
-/* 🔥 BLOQUE LE SCROLL */
-height:100vh;
-overflow:hidden;
+text-align:center;
 }
 
 .topbar{
 padding:14px;
 background:#111827;
-text-align:center;
 font-weight:bold;
 }
 
@@ -33,26 +25,21 @@ cursor:pointer;
 
 #game{
 display:none;
-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+padding:10px;
 }
 
 #board{
 width:90%;
 max-width:360px;
-aspect-ratio:1/1;
+margin:20px auto;
 display:grid;
 grid-template-columns:repeat(8,1fr);
-grid-template-rows:repeat(8,1fr);
+aspect-ratio:1/1;
 border:3px solid #333;
 border-radius:10px;
 overflow:hidden;
 }
 
-/* 🔥 CASES */
 .square{
 display:flex;
 align-items:center;
@@ -61,12 +48,11 @@ font-size:32px;
 user-select:none;
 }
 
-/* 🔥 DAMIER OBLIGATOIRE */
 .white{background:#f0d9b5;}
 .black{background:#b58863;}
 
 .panel{
-margin-top:15px;
+margin:10px;
 }
 
 button{
@@ -77,11 +63,4 @@ border:none;
 color:white;
 border-radius:10px;
 font-weight:bold;
-}
-
-.square img{
-width:90%;
-height:90%;
-object-fit:contain;
-pointer-events:none;
 }
