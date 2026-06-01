@@ -8,7 +8,7 @@ const pieces = {
 
 function start(){
 document.getElementById("menu").style.display="none";
-document.getElementById("game").style.display="block";
+document.getElementById("game").style.display="flex";
 init();
 }
 
@@ -40,7 +40,7 @@ let p = board[r][c];
 
 html += `
 <div class="square ${color}" onclick="clickSquare(${r},${c})">
-${pieces[p] || ""}
+${pieces[p] ? pieces[p] : ""}
 </div>`;
 }
 }
