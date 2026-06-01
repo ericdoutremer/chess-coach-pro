@@ -5,7 +5,18 @@ let engine;
 let playerElo = 1000;
 let trainStep = 0;
 
-function startGame(){
+function startGame(mode){
+
+document.getElementById("menu").style.display="none";
+document.getElementById("gameArea").style.display="block";
+
+initGame();
+
+window.mode = mode;
+
+}
+
+function initGame(){
 
 game = new Chess();
 
@@ -22,7 +33,7 @@ engine = Stockfish();
 playerElo = 1000;
 trainStep = 0;
 
-document.getElementById("info").innerText = "";
+document.getElementById("info").innerText="";
 
 }
 
@@ -36,12 +47,10 @@ promotion:'q'
 
 if(!move) return 'snapback';
 
-// MODE TRAINING
-if(document.getElementById("mode").value === "train"){
-return trainingCheck(move);
+if(window.mode === "train"){
+return training(move);
 }
 
-// MODE PLAY
 analyze(move,false);
 updateElo(false);
 
@@ -52,9 +61,6 @@ checkGameOver();
 }
 
 function aiMove(){
-
-let moves = game.moves();
-if(!moves.length) return;
 
 engine.postMessage("position fen " + game.fen());
 engine.postMessage("go depth 12");
@@ -86,13 +92,10 @@ if(move.captured){
 text="⚠️ échange";
 }
 else if(["e4","d4","e5","d5"].includes(move.to)){
-text="✔ centre contrôlé";
-}
-else if(move.piece !== "p"){
-text="♞ développement";
+text="✔ centre";
 }
 else{
-text="♟ coup standard";
+text="♟ coup";
 }
 
 document.getElementById("info").innerText +=
@@ -112,21 +115,20 @@ document.getElementById("eloDisplay").innerText =
 
 }
 
-function trainingCheck(move){
+function training(move){
 
-let opening = document.getElementById("opening").value;
-let line = OPENINGS[opening];
+let open = document.getElementById("opening").value;
+let line = OPENINGS[open];
 
 let expected = line[trainStep];
 
 if(game.fen().includes(expected.split(" ").pop())){
 trainStep++;
 document.getElementById("info").innerText =
-"✔ bon coup ouverture ("+trainStep+"/"+line.length+")";
-}
-else{
+"✔ bon coup";
+}else{
 document.getElementById("info").innerText =
-"❌ hors répertoire";
+"❌ erreur ouverture";
 }
 
 }
@@ -134,7 +136,7 @@ document.getElementById("info").innerText =
 function checkGameOver(){
 
 if(game.in_checkmate()){
-document.getElementById("info").innerText += "\n🏆 échec et mat";
+document.getElementById("info").innerText += "\n🏆 mat";
 }
 
 if(game.in_draw()){

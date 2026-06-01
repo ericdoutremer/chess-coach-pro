@@ -3,36 +3,58 @@ margin:0;
 font-family:Arial;
 background:#0b1020;
 color:white;
-text-align:center;
 }
 
-header{
-padding:12px;
+.topbar{
+padding:14px;
 background:#111827;
-font-size:18px;
+text-align:center;
 font-weight:bold;
+}
+
+#menu{
+padding:15px;
+}
+
+.card{
+background:#1f2937;
+padding:16px;
+margin:12px 0;
+border-radius:16px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.card:hover{
+transform:scale(1.02);
+background:#243041;
+}
+
+#gameArea{
+display:none;
+padding:10px;
 }
 
 .panel{
-margin:10px;
-padding:10px;
 background:#1f2937;
+padding:10px;
+margin:10px;
 border-radius:12px;
 }
 
-button,select{
-width:90%;
+select,button{
+width:100%;
 padding:12px;
-margin:8px auto;
-border-radius:10px;
+margin-top:8px;
 border:none;
+border-radius:10px;
 font-size:16px;
-font-weight:bold;
 }
 
 button{
 background:#3b82f6;
 color:white;
+font-weight:bold;
 }
 
 #board{
@@ -44,6 +66,5 @@ touch-action:none;
 
 #info{
 padding:10px;
-font-size:14px;
 white-space:pre-line;
 }

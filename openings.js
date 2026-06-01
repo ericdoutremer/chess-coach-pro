@@ -1,4 +1,5 @@
 const OPENINGS = {
+
 anglaise: [
 "c4",
 "c4 e5",
@@ -19,4 +20,5 @@ hollandaise: [
 "d4 f5 Nf3 Nf6",
 "d4 f5 Nf3 Nf6 e3"
 ]
+
 };
