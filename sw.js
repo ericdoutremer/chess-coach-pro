@@ -1,5 +1,5 @@
-self.addEventListener("install",()=>self.skipWaiting());
+self.addEventListener("install",e=>self.skipWaiting());
 
-self.addEventListener("fetch",event=>{
-event.respondWith(fetch(event.request).catch(()=>new Response("Offline")));
+self.addEventListener("fetch",e=>{
+e.respondWith(fetch(e.request).catch(()=>new Response("offline")));
 });
