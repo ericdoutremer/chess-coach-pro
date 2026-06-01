@@ -1,23 +1,62 @@
 <!doctype html>
-<html lang="fr">
+<html>
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Chess Coach Pro</title>
+
 <link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://unpkg.com/@chrisoakman/chessboardjs/dist/chessboard-1.0.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+<!-- Stockfish -->
+<script src="https://cdn.jsdelivr.net/npm/stockfish@16.0.0/src/stockfish.min.js"></script>
+
+<script src="openings.js"></script>
+<script src="app.js"></script>
+
 </head>
 
 <body>
 
-<div class="menu">
-<h1>♟️ Chess Coach Pro</h1>
+<header>♟️ Chess Coach Pro</header>
 
-<button onclick="location.href='play.html'">▶ Jouer vs IA</button>
+<div class="panel">
 
-<button disabled>🧠 Entraînement (phase 3)</button>
-<button disabled>📚 Répertoire (phase 3)</button>
+<label>Mode</label>
+<select id="mode">
+<option value="play">Jouer vs IA</option>
+<option value="train">Entraînement ouverture</option>
+</select>
+
+<label>Ouverture</label>
+<select id="opening">
+<option value="anglaise">Anglaise</option>
+<option value="scandinave">Scandinave</option>
+<option value="hollandaise">Hollandaise</option>
+</select>
+
+<label>Elo IA</label>
+<select id="elo">
+<option>800</option>
+<option>1200</option>
+<option selected>1500</option>
+<option>1800</option>
+</select>
+
+<button onclick="startGame()">▶ Démarrer</button>
 
 </div>
+
+<div id="board"></div>
+
+<div class="panel">
+<div id="eloDisplay">Elo joueur: 1000</div>
+</div>
+
+<div id="info"></div>
 
 </body>
 </html>

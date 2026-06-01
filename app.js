@@ -3,8 +3,9 @@ let board;
 let engine;
 
 let playerElo = 1000;
+let trainStep = 0;
 
-function init(){
+function startGame(){
 
 game = new Chess();
 
@@ -16,8 +17,12 @@ onDrop:onDrop,
 onSnapEnd:()=>board.position(game.fen())
 });
 
-// STOCKFISH
 engine = Stockfish();
+
+playerElo = 1000;
+trainStep = 0;
+
+document.getElementById("info").innerText = "";
 
 }
 
@@ -31,15 +36,19 @@ promotion:'q'
 
 if(!move) return 'snapback';
 
-let comment = analyze(move,false);
+// MODE TRAINING
+if(document.getElementById("mode").value === "train"){
+return trainingCheck(move);
+}
 
-document.getElementById("info").innerHTML += "🧑 "+comment+"<br>";
-
-updateElo(move,false);
+// MODE PLAY
+analyze(move,false);
+updateElo(false);
 
 setTimeout(aiMove,400);
 
 checkGameOver();
+
 }
 
 function aiMove(){
@@ -50,20 +59,18 @@ if(!moves.length) return;
 engine.postMessage("position fen " + game.fen());
 engine.postMessage("go depth 12");
 
-engine.onmessage = function(event){
+engine.onmessage = function(e){
 
-if(event.data.includes("bestmove")){
+if(e.data.includes("bestmove")){
 
-let best = event.data.split(" ")[1];
+let best = e.data.split(" ")[1];
 
 game.move(best);
 board.position(game.fen());
 
-let comment = analyze({to:best},true);
+analyze({to:best},true);
 
-document.getElementById("info").innerHTML += "🤖 "+comment+"<br>";
-
-updateElo(best,true);
+updateElo(true);
 
 checkGameOver();
 }
@@ -73,44 +80,65 @@ checkGameOver();
 
 function analyze(move,isAI){
 
+let text="";
+
 if(move.captured){
-return "⚠️ échange";
+text="⚠️ échange";
+}
+else if(["e4","d4","e5","d5"].includes(move.to)){
+text="✔ centre contrôlé";
+}
+else if(move.piece !== "p"){
+text="♞ développement";
+}
+else{
+text="♟ coup standard";
 }
 
-if(["e4","d4","e5","d5"].includes(move.to)){
-return "✔ centre contrôlé";
+document.getElementById("info").innerText +=
+(isAI?"🤖 ":"🧑 ")+text+"\n";
+
 }
 
-return "♟ coup joué";
-}
+function updateElo(good){
 
-function updateElo(move,isGood){
-
-if(isGood) playerElo += 5;
+if(good) playerElo += 5;
 else playerElo -= 10;
 
 if(playerElo < 400) playerElo = 400;
 
-document.getElementById("elo").innerText =
-"Elo estimé: " + playerElo;
+document.getElementById("eloDisplay").innerText =
+"Elo joueur: " + playerElo;
+
+}
+
+function trainingCheck(move){
+
+let opening = document.getElementById("opening").value;
+let line = OPENINGS[opening];
+
+let expected = line[trainStep];
+
+if(game.fen().includes(expected.split(" ").pop())){
+trainStep++;
+document.getElementById("info").innerText =
+"✔ bon coup ouverture ("+trainStep+"/"+line.length+")";
+}
+else{
+document.getElementById("info").innerText =
+"❌ hors répertoire";
+}
+
 }
 
 function checkGameOver(){
 
 if(game.in_checkmate()){
-document.getElementById("info").innerHTML += "🏆 Échec et mat<br>";
+document.getElementById("info").innerText += "\n🏆 échec et mat";
 }
 
 if(game.in_draw()){
-document.getElementById("info").innerHTML += "🤝 Nulle<br>";
-}
-}
-
-function newGame(){
-game = new Chess();
-board.start();
-document.getElementById("info").innerHTML="";
-playerElo=1000;
+document.getElementById("info").innerText += "\n🤝 nulle";
 }
 
-window.onload = init;
+}

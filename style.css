@@ -6,31 +6,33 @@ color:white;
 text-align:center;
 }
 
-.menu{
-padding:20px;
-}
-
-h1{
-margin-bottom:30px;
-}
-
-button{
-width:90%;
-padding:14px;
-margin:10px auto;
-border:none;
-border-radius:12px;
+header{
+padding:12px;
+background:#111827;
 font-size:18px;
-background:#3b82f6;
-color:white;
 font-weight:bold;
 }
 
-.topbar{
-display:flex;
-justify-content:space-between;
+.panel{
+margin:10px;
 padding:10px;
-background:#111827;
+background:#1f2937;
+border-radius:12px;
+}
+
+button,select{
+width:90%;
+padding:12px;
+margin:8px auto;
+border-radius:10px;
+border:none;
+font-size:16px;
+font-weight:bold;
+}
+
+button{
+background:#3b82f6;
+color:white;
 }
 
 #board{
@@ -40,11 +42,8 @@ margin:auto;
 touch-action:none;
 }
 
-.panel{
-margin-top:10px;
-}
-
 #info{
 padding:10px;
 font-size:14px;
+white-space:pre-line;
 }
