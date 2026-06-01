@@ -1,17 +1,17 @@
-function aiMove(game){
+let engine = Stockfish();
 
-let moves = game.moves();
+function aiMove(game, callback){
 
-if(!moves.length) return null;
+engine.postMessage("position fen " + game.fen());
+engine.postMessage("go depth 12");
 
-// IA simple mais stable (style Chess.com débutant)
-let center = ["e4","d4","e5","d5","c4"];
+engine.onmessage = function(event){
 
-let good = moves.find(m =>
-center.includes(m.slice(-2))
-);
+let line = event.data;
 
-if(good) return good;
-
-return moves[Math.floor(Math.random()*moves.length)];
+if(line.includes("bestmove")){
+let move = line.split(" ")[1];
+callback(move);
+}
+};
 }

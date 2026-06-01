@@ -43,3 +43,8 @@ touch-action:none;
 .panel{
 margin-top:10px;
 }
+
+#info{
+padding:10px;
+font-size:14px;
+}

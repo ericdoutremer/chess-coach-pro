@@ -1,6 +1,8 @@
 let game;
 let board;
-let gameOver=false;
+let engine;
+
+let playerElo = 1000;
 
 function init(){
 
@@ -14,11 +16,12 @@ onDrop:onDrop,
 onSnapEnd:()=>board.position(game.fen())
 });
 
+// STOCKFISH
+engine = Stockfish();
+
 }
 
 function onDrop(source,target){
-
-if(gameOver) return 'snapback';
 
 let move = game.move({
 from:source,
@@ -28,35 +31,86 @@ promotion:'q'
 
 if(!move) return 'snapback';
 
-setTimeout(()=>{
-let ai = aiMove(game);
-if(ai) game.move(ai);
-board.position(game.fen());
-},400);
+let comment = analyze(move,false);
+
+document.getElementById("info").innerHTML += "🧑 "+comment+"<br>";
+
+updateElo(move,false);
+
+setTimeout(aiMove,400);
 
 checkGameOver();
+}
 
+function aiMove(){
+
+let moves = game.moves();
+if(!moves.length) return;
+
+engine.postMessage("position fen " + game.fen());
+engine.postMessage("go depth 12");
+
+engine.onmessage = function(event){
+
+if(event.data.includes("bestmove")){
+
+let best = event.data.split(" ")[1];
+
+game.move(best);
+board.position(game.fen());
+
+let comment = analyze({to:best},true);
+
+document.getElementById("info").innerHTML += "🤖 "+comment+"<br>";
+
+updateElo(best,true);
+
+checkGameOver();
+}
+};
+
+}
+
+function analyze(move,isAI){
+
+if(move.captured){
+return "⚠️ échange";
+}
+
+if(["e4","d4","e5","d5"].includes(move.to)){
+return "✔ centre contrôlé";
+}
+
+return "♟ coup joué";
+}
+
+function updateElo(move,isGood){
+
+if(isGood) playerElo += 5;
+else playerElo -= 10;
+
+if(playerElo < 400) playerElo = 400;
+
+document.getElementById("elo").innerText =
+"Elo estimé: " + playerElo;
 }
 
 function checkGameOver(){
 
 if(game.in_checkmate()){
-gameOver=true;
-document.getElementById("info").innerText="🏆 Échec et mat";
+document.getElementById("info").innerHTML += "🏆 Échec et mat<br>";
 }
 
 if(game.in_draw()){
-gameOver=true;
-document.getElementById("info").innerText="🤝 Nulle";
+document.getElementById("info").innerHTML += "🤝 Nulle<br>";
 }
-
 }
 
 function newGame(){
 game = new Chess();
 board.start();
-gameOver=false;
-document.getElementById("info").innerText="";
+document.getElementById("info").innerHTML="";
+playerElo=1000;
 }
 
-init();
+window.onload = init;
