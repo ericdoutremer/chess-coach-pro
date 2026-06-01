@@ -10,15 +10,16 @@ function startGame(mode){
 document.getElementById("menu").style.display="none";
 document.getElementById("gameArea").style.display="block";
 
-initGame();
-
 window.mode = mode;
 
+initGame();
 }
 
 function initGame(){
 
 game = new Chess();
+
+setTimeout(()=>{
 
 board = Chessboard('board', {
 position:'start',
@@ -28,13 +29,14 @@ onDrop:onDrop,
 onSnapEnd:()=>board.position(game.fen())
 });
 
+},100);
+
 engine = Stockfish();
 
 playerElo = 1000;
 trainStep = 0;
 
 document.getElementById("info").innerText="";
-
 }
 
 function onDrop(source,target){
@@ -55,9 +57,7 @@ analyze(move,false);
 updateElo(false);
 
 setTimeout(aiMove,400);
-
 checkGameOver();
-
 }
 
 function aiMove(){
@@ -75,13 +75,11 @@ game.move(best);
 board.position(game.fen());
 
 analyze({to:best},true);
-
 updateElo(true);
 
 checkGameOver();
 }
 };
-
 }
 
 function analyze(move,isAI){
@@ -100,7 +98,6 @@ text="♟ coup";
 
 document.getElementById("info").innerText +=
 (isAI?"🤖 ":"🧑 ")+text+"\n";
-
 }
 
 function updateElo(good){
@@ -112,7 +109,6 @@ if(playerElo < 400) playerElo = 400;
 
 document.getElementById("eloDisplay").innerText =
 "Elo joueur: " + playerElo;
-
 }
 
 function training(move){
@@ -130,7 +126,6 @@ document.getElementById("info").innerText =
 document.getElementById("info").innerText =
 "❌ erreur ouverture";
 }
-
 }
 
 function checkGameOver(){
@@ -142,5 +137,8 @@ document.getElementById("info").innerText += "\n🏆 mat";
 if(game.in_draw()){
 document.getElementById("info").innerText += "\n🤝 nulle";
 }
+}
 
+function newGame(){
+initGame();
 }
